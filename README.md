@@ -19,6 +19,12 @@ Features
 - Can optionally create a slug without the auto-incrementing index.
 - Can optionally update a slug when the field it is based from is updated.
 
+Installation
+------------------------
+```
+meteor add todda00:friendly-slugs
+```
+
 Usage
 ------------------------
 
