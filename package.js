@@ -11,7 +11,7 @@ Package.describe({
 });
 
 Package.onUse(function(api) {
-  api.use(['coffeescript','matb33:collection-hooks']);
+  api.use(['coffeescript','matb33:collection-hooks@0.7.6']);
   api.versionsFrom('1.0');
   api.addFiles('slugs.coffee');
 });
