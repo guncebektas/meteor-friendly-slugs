@@ -4,7 +4,6 @@ if typeof Mongo is "undefined"
   Mongo.Collection = Meteor.Collection
 
 Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
-  
   collection = @
 
   if !_.isArray(options)
@@ -23,6 +22,7 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
       distinct: true
       updateSlug: true
       createOnUpdate: true
+      debug: false
 
     _.defaults(opts, defaults)
 
@@ -32,6 +32,7 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
       distinct: Boolean
       updateSlug: Boolean
       createOnUpdate: Boolean
+      debug: Boolean
 
     check(opts,Match.ObjectIncluding(fields))
 
@@ -120,10 +121,11 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
       doc.friendlySlugs[opts.slugField] = doc.friendlySlugs[opts.slugField] || {}
       doc.friendlySlugs[opts.slugField].base = slugBase
       doc.friendlySlugs[opts.slugField].index = index
-      doc[opts.slugField] = finalSlug
+      doc[opts.slugField] = finalSlug    
 
 slugify = (text) ->
   return false if !text?
+  return false if text.length < 1
   return text.toString().toLowerCase()
     .replace(/\s+/g, '-')           # Replace spaces with -
     .replace(/[^\w\-]+/g, '')       # Remove all non-word chars

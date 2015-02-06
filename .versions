@@ -18,6 +18,6 @@ mongo@1.0.11
 ordered-dict@1.0.2
 random@1.0.2
 retry@1.0.2
-todda00:friendly-slugs@0.1.0
+todda00:friendly-slugs@0.1.1
 tracker@1.0.5
 underscore@1.0.2
