@@ -1,5 +1,8 @@
 HISTORY.md
 
+### v0.1.3
+ - Added debug logging and fixed some logic issues when adding slugs to existing items
+
 ### v0.1.2
  - Added check to not try to slug an empty string
 
