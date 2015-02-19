@@ -1,5 +1,8 @@
 HISTORY.md
 
+### v0.2.0
+ - Added transliteration option to convert accented and other variant characters to the closest english equivelant.
+
 ### v0.1.3
  - Added debug logging and fixed some logic issues when adding slugs to existing items
 

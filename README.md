@@ -9,8 +9,9 @@ Features
 ------------------------
 - Automatically assign a URL friendly slug based on a field of your specification. The slug will be sanitized following these rules:
   - Uses all lowercase letters
+  - Transliterates accented and other variants (see [Transliteration](#transliteration))
   - Replace spaces with -
-  - Remove all non-word chars
+  - Replace anything that is not 0-9, a-z, or - with -
   - Replace multiple - with single -
   - Trim - from start of text
   - Trim - from end of text
@@ -97,7 +98,37 @@ slugField | 'slug' | Name of field you want the slug to be stored to. *String*
 distinct | true |  True = Slugs are unique, if 'foo' is already a stored slug for another item, the new item's slug will be 'foo-1' False = Slugs will not be unique, items can have the same slug as another item in the same collection. *Boolean*
 updateSlug | true | True = Update the item's slug if the slugField's content changes in an update. False = Slugs do not change when the slugField changes. *Boolean*
 createOnUpdate | true | True = If an item is updated and the slug has not been created yet and the slugField has not changed, create the slug during the update False = Slugs will not be created during an update unless updateSlug = true in your settings and the slugField has changed. *Boolean*
+transliteration | see default array in [Transliteration](#transliteration) | Translates characters with accents to URL compatible characters, see [Transliteration](#transliteration) for more info.
 debug | false | Turn to true to get console debug messages.
+
+Transliteration
+------------------------
+The default settings transliterate characters with accents and other variations to the closest english ASCII alphanumeric equivelant. The conversion is customizable, so you can transliterate from any characters to any character(s).
+
+The tranliteration setting can be set as such: (this example is the default usage, you don't need to add the option to get these results.) (coffeescript)
+
+```
+
+Collection.friendlySlugs
+  transliteration: [
+    {from: 'àáâäã',  to: 'a'}
+    {from: 'æ',      to: 'ae'}
+    {from: 'ç',      to: 'c'}
+    {from: 'èéêëẽ',  to: 'e'}
+    {from: 'ìíîï',   to: 'i' }
+    {from: 'ñ',      to: 'n' }
+    {from: 'òóôöõ',  to: 'o'}
+    {from: 'ùúûü',   to: 'u'}
+  ]
+```
+
+```
+"...Only alphanumerics [0-9a-zA-Z], the special characters "$-_.+!*'()," [not including the quotes - ed], and reserved characters used for their reserved purposes may be used unencoded within a URL."
+```
+For the slug part of the URL, we are only allowing a-z, 0-9, and -
+This keeps in accordance with [RFC 1738](http://www.rfc-editor.org/rfc/rfc1738.txt) explained [here in a more helpful way](http://www.blooberry.com/indexdot/html/topics/urlencoding.htm)
+
+
 
 Updates Using multi=true
 ------------------------

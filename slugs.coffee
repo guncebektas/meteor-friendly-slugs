@@ -22,6 +22,16 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
       updateSlug: true
       createOnUpdate: true
       debug: false
+      transliteration: [
+        {from: 'àáâäã',  to: 'a'}
+        {from: 'æ',      to: 'ae'}
+        {from: 'ç',      to: 'c'}
+        {from: 'èéêëẽ',  to: 'e'}
+        {from: 'ìíîï',   to: 'i' }
+        {from: 'ñ',      to: 'n' }
+        {from: 'òóôöõ',  to: 'o'}
+        {from: 'ùúûü',   to: 'u'}
+      ]
 
     _.defaults(opts, defaults)
 
@@ -97,7 +107,7 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
 
     fsDebug(opts,from,'Slugging From')
 
-    slugBase = slugify(from)
+    slugBase = slugify(from, opts.transliteration)
     return false if !slugBase
 
     fsDebug(opts,slugBase,'SlugBase')
@@ -168,12 +178,14 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
     else
       console.log "friendlySlugs DEBUG: " + label + '= ' + item
 
-slugify = (text) ->
+slugify = (text, transliteration) ->
   return false if !text?
   return false if text.length < 1
-  return text.toString().toLowerCase()
-    .replace(/\s+/g, '-')           # Replace spaces with -
-    .replace(/[^\w\-]+/g, '')       # Remove all non-word chars
+  text = text.toString().toLowerCase()
+  _.each transliteration, (item)->
+    text = text.replace(new RegExp('['+item.from+']','g'),item.to)
+  return text
+    .replace(/[^0-9a-z-]/g, '-') # Replace anything that is not 0-9, a-z, or - with -
     .replace(/\-\-+/g, '-')         # Replace multiple - with single -
     .replace(/^-+/, '')             # Trim - from start of text
     .replace(/-+$/, '');            # Trim - from end of text
