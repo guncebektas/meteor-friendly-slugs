@@ -1,5 +1,8 @@
 HISTORY.md
 
+### v0.2.1
+ - Fixed bug when checking for options.multi when options is not set
+
 ### v0.2.0
  - Added transliteration option to convert accented and other variant characters to the closest english equivelant.
 

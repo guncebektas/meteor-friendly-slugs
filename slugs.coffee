@@ -51,6 +51,7 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
 
     collection.before.update (userId, doc, fieldNames, modifier, options) ->
       #Don't do anything if this is a multi doc update
+      options = options || {}
       if options.multi
         fsDebug(opts,"multi doc update attempted, can't update slugs this way, leaving.")
         return true
