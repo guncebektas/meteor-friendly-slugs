@@ -111,9 +111,14 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
     slugBase = slugify(from, opts.transliteration)
     return false if !slugBase
 
-    fsDebug(opts,slugBase,'SlugBase')
+    fsDebug(opts,slugBase,'SlugBase before reduction')
 
     if opts.distinct
+      
+      # Check to see if this base has a -[0-9999...] at the end, reduce to a real base
+      slugBase = slugBase.replace(/(-\d+)+$/,'')
+      fsDebug(opts,slugBase,'SlugBase after reduction')
+
       baseField = "friendlySlugs." + opts.slugField + ".base"
       indexField = "friendlySlugs." + opts.slugField + ".index"
 

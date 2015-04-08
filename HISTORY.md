@@ -1,5 +1,8 @@
 HISTORY.md
 
+### v0.3.0
+ - Fixed issue #3 - Slugs aren't guaranteed to be unique
+
 ### v0.2.1
  - Fixed bug when checking for options.multi when options is not set
 

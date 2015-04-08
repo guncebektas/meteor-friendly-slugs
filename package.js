@@ -1,6 +1,6 @@
 Package.describe({
   name: 'todda00:friendly-slugs',
-  version: '0.2.1',
+  version: '0.3.0',
   // Brief, one-line summary of the package.
   summary: 'Generate URL friendly slugs from a field with auto-incrementation to ensure unique URLs.',
   // URL to the Git repository containing the source code for this package.
@@ -11,7 +11,7 @@ Package.describe({
 });
 
 Package.onUse(function(api) {
-  api.use(['coffeescript','matb33:collection-hooks@0.7.6']);
+  api.use(['underscore','coffeescript','matb33:collection-hooks@0.7.6']);
   api.versionsFrom('1.0');
   api.addFiles('slugs.coffee');
 });
