@@ -1,5 +1,10 @@
 HISTORY.md
 
+### v0.3.1
+ - Added 'check' package dependency via PR #4
+ - Added russian characters to default transliteration via PR #7
+ - Fixed empty $set errors, fixing #5 and #6
+
 ### v0.3.0
  - Fixed issue #3 - Slugs aren't guaranteed to be unique
 

@@ -23,46 +23,37 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
       createOnUpdate: true
       debug: false
       transliteration: [
-        {from: 'àáâäã',  to: 'a'}
-        {from: 'æ',      to: 'ae'}
+        {from: 'àáâäãа', to: 'a'}
+        {from: 'б',      to: 'b'}
         {from: 'ç',      to: 'c'}
-        {from: 'èéêëẽ',  to: 'e'}
-        {from: 'ìíîï',   to: 'i' }
-        {from: 'ñ',      to: 'n' }
-        {from: 'òóôöõ',  to: 'o'}
-        {from: 'ùúûü',   to: 'u'}
-        {from: 'а', to: 'a'}
-        {from: 'б', to: 'b'}
-        {from: 'в', to: 'v'}
-        {from: 'г', to: 'g'}
-        {from: 'д', to: 'd'}
-        {from: 'е', to: 'e'}
-        {from: 'ж', to: 'zh'}
-        {from: 'з', to: 'z'}
-        {from: 'и', to: 'i'}
-        {from: 'й', to: 'y'}
-        {from: 'к', to: 'k'}
-        {from: 'л', to: 'l'}
-        {from: 'м', to: 'm'}
-        {from: 'н', to: 'n'}
-        {from: 'о', to: 'o'}
-        {from: 'п', to: 'p'}
-        {from: 'р', to: 'r'}
-        {from: 'с', to: 's'}
-        {from: 'т', to: 't'}
-        {from: 'у', to: 'u'}
-        {from: 'ф', to: 'f'}
-        {from: 'х', to: 'h'}
-        {from: 'ц', to: 'ts'}
-        {from: 'ч', to: 'ch'}
-        {from: 'ш', to: 'sh'}
-        {from: 'щ', to: 'sch'}
-        {from: 'ъ', to: ''}
-        {from: 'ы', to: 'y'}
-        {from: 'ь', to: ''}
-        {from: 'э', to: 'e'}
-        {from: 'ю', to: 'yu'}
-        {from: 'я', to: 'ya'}
+        {from: 'д',      to: 'd'}
+        {from: 'èéêëẽэе',to: 'e'}
+        {from: 'ф',      to: 'f'}
+        {from: 'г',      to: 'g'}
+        {from: 'х',      to: 'h'}
+        {from: 'ìíîïи',  to: 'i'}
+        {from: 'к',      to: 'k'}
+        {from: 'л',      to: 'l'}
+        {from: 'м',      to: 'm'}
+        {from: 'ñн',     to: 'n'}
+        {from: 'òóôöõо', to: 'o'}
+        {from: 'п',      to: 'p'}
+        {from: 'р',      to: 'r'}
+        {from: 'с',      to: 's'}
+        {from: 'т',      to: 't'}
+        {from: 'ùúûüу',  to: 'u'}
+        {from: 'в',      to: 'v'}
+        {from: 'йы',     to: 'y'}
+        {from: 'з',      to: 'z'}
+        {from: 'æ',      to: 'ae'}
+        {from: 'ч',      to: 'ch'}
+        {from: 'щ',      to: 'sch'}
+        {from: 'ш',      to: 'sh'}
+        {from: 'ц',      to: 'ts'}
+        {from: 'я',      to: 'ya'}
+        {from: 'ю',      to: 'yu'}
+        {from: 'ж',      to: 'zh'}
+        {from: 'ъь',     to: ''}        
       ]
 
     _.defaults(opts, defaults)
@@ -127,6 +118,10 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
           return true
 
         runSlug(doc, opts, modifier)
+
+        #Cleanup the modifier if needed
+        delete modifier.$set if _.isEmpty(modifier.$set)
+
         return true
       return true
     return

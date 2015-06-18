@@ -108,17 +108,39 @@ The default settings transliterate characters with accents and other variations 
 The tranliteration setting can be set as such: (this example is the default usage, you don't need to add the option to get these results.) (coffeescript)
 
 ```
-
 Collection.friendlySlugs
   transliteration: [
-    {from: 'àáâäã',  to: 'a'}
-    {from: 'æ',      to: 'ae'}
+    {from: 'àáâäãа', to: 'a'}
+    {from: 'б',      to: 'b'}
     {from: 'ç',      to: 'c'}
-    {from: 'èéêëẽ',  to: 'e'}
-    {from: 'ìíîï',   to: 'i' }
-    {from: 'ñ',      to: 'n' }
-    {from: 'òóôöõ',  to: 'o'}
-    {from: 'ùúûü',   to: 'u'}
+    {from: 'д',      to: 'd'}
+    {from: 'èéêëẽэе',to: 'e'}
+    {from: 'ф',      to: 'f'}
+    {from: 'г',      to: 'g'}
+    {from: 'х',      to: 'h'}
+    {from: 'ìíîïи',  to: 'i'}
+    {from: 'к',      to: 'k'}
+    {from: 'л',      to: 'l'}
+    {from: 'м',      to: 'm'}
+    {from: 'ñн',     to: 'n'}
+    {from: 'òóôöõо', to: 'o'}
+    {from: 'п',      to: 'p'}
+    {from: 'р',      to: 'r'}
+    {from: 'с',      to: 's'}
+    {from: 'т',      to: 't'}
+    {from: 'ùúûüу',  to: 'u'}
+    {from: 'в',      to: 'v'}
+    {from: 'йы',     to: 'y'}
+    {from: 'з',      to: 'z'}
+    {from: 'æ',      to: 'ae'}
+    {from: 'ч',      to: 'ch'}
+    {from: 'щ',      to: 'sch'}
+    {from: 'ш',      to: 'sh'}
+    {from: 'ц',      to: 'ts'}
+    {from: 'я',      to: 'ya'}
+    {from: 'ю',      to: 'yu'}
+    {from: 'ж',      to: 'zh'}
+    {from: 'ъь',     to: ''}
   ]
 ```
 
