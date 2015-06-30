@@ -1,5 +1,8 @@
 HISTORY.md
 
+### v0.3.2
+ - Add modifier cleanup code at all exit points to avoid $set empty errors
+
 ### v0.3.1
  - Added 'check' package dependency via PR #4
  - Added russian characters to default transliteration via PR #7

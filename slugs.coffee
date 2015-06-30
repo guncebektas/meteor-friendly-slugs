@@ -73,6 +73,10 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
       return
 
     collection.before.update (userId, doc, fieldNames, modifier, options) ->
+      cleanModifier = () ->
+        #Cleanup the modifier if needed
+        delete modifier.$set if _.isEmpty(modifier.$set)
+
       #Don't do anything if this is a multi doc update
       options = options || {}
       if options.multi
@@ -83,7 +87,9 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
       modifier.$set = modifier.$set || {}
 
       #Don't do anything if the slugFrom field isn't present (before or after update)
-      return true if !doc[opts.slugFrom]? and !modifier.$set[opts.slugFrom]?
+      if !doc[opts.slugFrom]? and !modifier.$set[opts.slugFrom]?
+        cleanModifier()
+        return true
 
       #See if the slugFrom has changed
       slugFromChanged = false
@@ -104,25 +110,28 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
           #Run the slug to create
           fsDebug(opts,'runSlug to create')
           runSlug(doc, opts, modifier, true)
+          cleanModifier()
           return true
 
       else
         # Don't change anything on update if updateSlug is false
         if opts.updateSlug is false
           fsDebug(opts,'updateSlug is false, nothing to do.')
+          cleanModifier()
           return true
 
         #Don't do anything if the slug from field has not changed
         if doc[opts.slugFrom] is modifier.$set[opts.slugFrom]
           fsDebug(opts,'slugFrom field has not changed, nothing to do.')
+          cleanModifier()
           return true
 
         runSlug(doc, opts, modifier)
 
-        #Cleanup the modifier if needed
-        delete modifier.$set if _.isEmpty(modifier.$set)
-
+        cleanModifier()
         return true
+        
+      cleanModifier()
       return true
     return
   runSlug = (doc, opts, modifier = false, create = false) ->
