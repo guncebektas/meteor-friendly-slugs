@@ -1,5 +1,8 @@
 HISTORY.md
 
+### v0.3.3
+ - Modify documentation about upserts
+
 ### v0.3.2
  - Add modifier cleanup code at all exit points to avoid $set empty errors
 
