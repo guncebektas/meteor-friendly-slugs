@@ -152,7 +152,7 @@ This keeps in accordance with [RFC 1738](http://www.rfc-editor.org/rfc/rfc1738.t
 
 Upserts are not supported yet
 ------------------------
-The underlying package friendlySlugs uses for insert/update hooks (https://github.com/matb33/meteor-collection-hooks/) doesn't support upsert yet; see matb33/meteor-collection-hooks#88. Once that package supports upsert, I will update this package to support it as well. For now, you can split the upsert into insert / update code if you would like to use this package.
+The underlying package friendlySlugs uses for insert/update hooks (https://github.com/matb33/meteor-collection-hooks/) doesn't support upsert yet; see https://github.com/matb33/meteor-collection-hooks/issues/88. Once that package supports upsert, I will update this package to support it as well. For now, you can split the upsert into insert / update code if you would like to use this package.
 
 Updates Using multi=true
 ------------------------
