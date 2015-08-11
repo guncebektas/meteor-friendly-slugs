@@ -11,6 +11,7 @@ Features
   - Uses all lowercase letters
   - Transliterates accented and other variants (see [Transliteration](#transliteration))
   - Replace spaces with -
+  - Removes apostrophes
   - Replace anything that is not 0-9, a-z, or - with -
   - Replace multiple - with single -
   - Trim - from start of text

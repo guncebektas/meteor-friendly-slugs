@@ -227,7 +227,8 @@ slugify = (text, transliteration) ->
   _.each transliteration, (item)->
     text = text.replace(new RegExp('['+item.from+']','g'),item.to)
   return text
-    .replace(/[^0-9a-z-]/g, '-') # Replace anything that is not 0-9, a-z, or - with -
+    .replace(/'/g, '')              # Remove all apostrophes
+    .replace(/[^0-9a-z-]/g, '-')    # Replace anything that is not 0-9, a-z, or - with -
     .replace(/\-\-+/g, '-')         # Replace multiple - with single -
     .replace(/^-+/, '')             # Trim - from start of text
     .replace(/-+$/, '');            # Trim - from end of text

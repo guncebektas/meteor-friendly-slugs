@@ -1,5 +1,8 @@
 HISTORY.md
 
+### v0.3.4
+ - Apostrophes are now removed prior to creating a slug instead of converting to a hyphen
+
 ### v0.3.3
  - Modify documentation about upserts
 
