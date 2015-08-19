@@ -21,6 +21,7 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
       distinct: true
       updateSlug: true
       createOnUpdate: true
+      maxLength: 100
       debug: false
       transliteration: [
         {from: 'àáâäãа', to: 'a'}
@@ -53,7 +54,7 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
         {from: 'я',      to: 'ya'}
         {from: 'ю',      to: 'yu'}
         {from: 'ж',      to: 'zh'}
-        {from: 'ъь',     to: ''}        
+        {from: 'ъь',     to: ''}
       ]
 
     _.defaults(opts, defaults)
@@ -64,6 +65,7 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
       distinct: Boolean
       updateSlug: Boolean
       createOnUpdate: Boolean
+      maxLength: Number
       debug: Boolean
 
     check(opts,Match.ObjectIncluding(fields))
@@ -130,7 +132,7 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
 
         cleanModifier()
         return true
-        
+
       cleanModifier()
       return true
     return
@@ -144,13 +146,13 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
 
     fsDebug(opts,from,'Slugging From')
 
-    slugBase = slugify(from, opts.transliteration)
+    slugBase = slugify(from, opts.transliteration, opts.maxLength)
     return false if !slugBase
 
     fsDebug(opts,slugBase,'SlugBase before reduction')
 
     if opts.distinct
-      
+
       # Check to see if this base has a -[0-9999...] at the end, reduce to a real base
       slugBase = slugBase.replace(/(-\d+)+$/,'')
       fsDebug(opts,slugBase,'SlugBase after reduction')
@@ -220,15 +222,19 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
     else
       console.log "friendlySlugs DEBUG: " + label + '= ' + item
 
-slugify = (text, transliteration) ->
+slugify = (text, transliteration, maxLength) ->
   return false if !text?
   return false if text.length < 1
   text = text.toString().toLowerCase()
   _.each transliteration, (item)->
     text = text.replace(new RegExp('['+item.from+']','g'),item.to)
-  return text
+  slug = text
     .replace(/'/g, '')              # Remove all apostrophes
     .replace(/[^0-9a-z-]/g, '-')    # Replace anything that is not 0-9, a-z, or - with -
     .replace(/\-\-+/g, '-')         # Replace multiple - with single -
     .replace(/^-+/, '')             # Trim - from start of text
     .replace(/-+$/, '');            # Trim - from end of text
+  if slug.length > maxLength
+    lastDash = slug.substring(0,maxLength).lastIndexOf('-')
+    slug = slug.substring(0,lastDash)
+  return slug
