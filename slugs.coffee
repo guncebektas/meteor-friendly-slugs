@@ -19,6 +19,7 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
       slugFrom: 'name'
       slugField: 'slug'
       distinct: true
+      distinctUpTo: []
       updateSlug: true
       createOnUpdate: true
       debug: false
@@ -160,6 +161,12 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
 
       fieldSelector = {}
       fieldSelector[baseField] = slugBase
+
+      i = 0
+      while i < opts.distinctUpTo.length
+        f = opts.distinctUpTo[i]
+        fieldSelector[f] = doc[f]
+        i++
 
       sortSelector = {}
       sortSelector[indexField] = -1
