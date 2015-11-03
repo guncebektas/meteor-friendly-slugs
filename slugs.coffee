@@ -21,7 +21,7 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
       distinct: true
       updateSlug: true
       createOnUpdate: true
-      maxLength: 100
+      maxLength: 0
       debug: false
       transliteration: [
         {from: 'àáâäãа', to: 'a'}
@@ -234,7 +234,7 @@ slugify = (text, transliteration, maxLength) ->
     .replace(/\-\-+/g, '-')         # Replace multiple - with single -
     .replace(/^-+/, '')             # Trim - from start of text
     .replace(/-+$/, '');            # Trim - from end of text
-  if slug.length > maxLength
+  if maxLength > 0 && slug.length > maxLength
     lastDash = slug.substring(0,maxLength).lastIndexOf('-')
     slug = slug.substring(0,lastDash)
   return slug
