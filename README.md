@@ -97,7 +97,7 @@ Option | Default | Description
 slugFrom | 'name' | Name of field you want to base the slug from. *String*
 slugField | 'slug' | Name of field you want the slug to be stored to. *String*
 distinct | true |  True = Slugs are unique, if 'foo' is already a stored slug for another item, the new item's slug will be 'foo-1' False = Slugs will not be unique, items can have the same slug as another item in the same collection. *Boolean*
-distinctUpTo | [] | if distinct = true list of fields of the collection that define the validity range of the distinction
+distinctUpTo | [] | if distinct = true list of fields of the collection that define the validity range of the distinction *Array of Strings*
 updateSlug | true | True = Update the item's slug if the slugField's content changes in an update. False = Slugs do not change when the slugField changes. *Boolean*
 createOnUpdate | true | True = If an item is updated and the slug has not been created yet and the slugField has not changed, create the slug during the update False = Slugs will not be created during an update unless updateSlug = true in your settings and the slugField has changed. *Boolean*
 maxLength | 0 (unlimited) | Limit how many characters the slug will be. This will not break words, but will break mid-sentence. Use 0 for no limit. *Number*
@@ -153,6 +153,46 @@ Collection.friendlySlugs
 For the slug part of the URL, we are only allowing a-z, 0-9, and -
 This keeps in accordance with [RFC 1738](http://www.rfc-editor.org/rfc/rfc1738.txt) explained [here in a more helpful way](http://www.blooberry.com/indexdot/html/topics/urlencoding.htm)
 
+Setting Distinct Fields
+------------------------
+Using the `distinctUpTo` option (which is relevant only if `distinct = true`) you can specify what fields need to match in order to cause the slug to increment the ID at the end.
+
+Business case: The slug have to be distinct not for the whole collection but only for the given user.
+Example, we insert:
+
+```
+{title:'Title A', created_user_id:'U1' }
+{title:'Title B', created_user_id:'U1' }
+{title:'Title C', created_user_id:'U2' }
+{title:'Title B', created_user_id:'U2' }
+{title:'Title C', created_user_id:'U2' }
+```
+
+And the generated slugs are:
+```
+title-a
+title-b
+title-c
+title-b
+title-c-1
+```
+
+The url can then be formatted using the created_user_id as part of the URL:
+
+http://.../:user/:slug
+
+Multiple fields can be specified for more specific distinction.
+
+Usage:
+```
+Collection.friendlySlugs(
+  {
+    slugFrom: 'name',
+    slugField: 'slug',
+    ...
+    distinctUpTo: ['created_user_id','another_field']
+  });
+```
 Upserts are not supported yet
 ------------------------
 The underlying package friendlySlugs uses for insert/update hooks (https://github.com/matb33/meteor-collection-hooks/) doesn't support upsert yet; see https://github.com/matb33/meteor-collection-hooks/issues/88. Once that package supports upsert, I will update this package to support it as well. For now, you can split the upsert into insert / update code if you would like to use this package.

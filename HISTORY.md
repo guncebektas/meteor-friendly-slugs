@@ -1,5 +1,8 @@
 HISTORY.md
 
+### v0.3.6
+ - Added distinctUpTo option to specify what fields need to match in order to make a unique slug
+
 ### v0.3.5
  - Added maxLength option to limit slug length, defaults to unlimited
 
