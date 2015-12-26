@@ -113,7 +113,7 @@ The tranliteration setting can be set as such: (this example is the default usag
 ```
 Collection.friendlySlugs
   transliteration: [
-    {from: 'àáâäãа', to: 'a'}
+    {from: 'àáâäåãа', to: 'a'}
     {from: 'б',      to: 'b'}
     {from: 'ç',      to: 'c'}
     {from: 'д',      to: 'd'}
