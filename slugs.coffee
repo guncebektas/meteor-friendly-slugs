@@ -189,10 +189,13 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
       else
         index = result.friendlySlugs[opts.slugField].index + 1
 
-      if index is 0
-        finalSlug = slugBase
-      else
-        finalSlug = slugBase + '-' + index
+      defaultSlugGenerator = (slugBase, index) ->
+        if index is 0 then slugBase else slugBase + '-' + index
+
+      slugGenerator = opts.slugGenerator ? defaultSlugGenerator
+
+      finalSlug = slugGenerator(slugBase, index)
+
     else
       #Not distinct, just set the base
       index = false
