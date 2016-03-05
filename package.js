@@ -2,7 +2,7 @@ Package.describe({
   name: 'todda00:friendly-slugs',
   version: '0.4.0',
   // Brief, one-line summary of the package.
-  summary: 'Generate URL friendly slugs from a field with auto-incrementation to ensure unique URLs.',
+  summary: 'Generate URL friendly slugs and store history of them.',
   // URL to the Git repository containing the source code for this package.
   git: 'https://github.com/todda00/meteor-friendly-slugs.git',
   // By default, Meteor will default to using README.md for documentation.

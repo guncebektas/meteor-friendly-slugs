@@ -1,5 +1,9 @@
 HISTORY.md
 
+### v0.4.0
+
+ - Added storing the history of previously used slugs
+
 ### v0.3.6
  - Added distinctUpTo option to specify what fields need to match in order to make a unique slug
 
