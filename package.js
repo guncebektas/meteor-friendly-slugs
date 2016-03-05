@@ -1,6 +1,6 @@
 Package.describe({
   name: 'todda00:friendly-slugs',
-  version: '0.4.0',
+  version: '0.4.1',
   // Brief, one-line summary of the package.
   summary: 'Generate URL friendly slugs and store history of them.',
   // URL to the Git repository containing the source code for this package.

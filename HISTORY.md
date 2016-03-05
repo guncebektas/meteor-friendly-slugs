@@ -1,5 +1,8 @@
 HISTORY.md
 
+### v0.4.1
+ - Fixed storing the history of previously used slugs
+
 ### v0.4.0
 
  - Added storing the history of previously used slugs
