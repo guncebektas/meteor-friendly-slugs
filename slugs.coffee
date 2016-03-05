@@ -162,8 +162,9 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
       indexField = "friendlySlugs." + opts.slugField + ".index"
 
       fieldSelector = {}
-      fieldSelector[baseField] = slugBase
-
+      fieldSelector["friendlySlugs.#{opts.slugField}"] = {$elemMatch: {base: slugBase}}
+      if doc._id
+        fieldSelector["_id"] = {$ne: doc._id}
       i = 0
       while i < opts.distinctUpTo.length
         f = opts.distinctUpTo[i]
@@ -176,18 +177,26 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
       limitSelector = {}
       limitSelector[indexField] = 1
 
-      result = collection.findOne(fieldSelector,
+      result = collection.find(fieldSelector,
         sort: sortSelector
-        fields: limitSelector
-        limit:1
-      )
+      ).fetch()
 
       fsDebug(opts,result,'Highest indexed base found')
 
-      if !result? || !result.friendlySlugs? || !result.friendlySlugs[opts.slugField]? || !result.friendlySlugs[opts.slugField].index?
+      if !result?
         index = 0
       else
-        index = result.friendlySlugs[opts.slugField].index + 1
+        indexesArr = []
+        _.each result, (collectionItem) ->
+          itemSlugs = collectionItem.friendlySlugs[opts.slugField]
+          itemSlugsWithCurrentBase = _.where itemSlugs, {
+            base: slugBase
+          }
+          maxIndex = _.max itemSlugsWithCurrentBase, (slugItem) ->
+            return slugItem.index
+          indexesArr.push maxIndex.index
+        highestIndex = _.max indexesArr
+        index = highestIndex + 1
 
       if index is 0
         finalSlug = slugBase
@@ -205,18 +214,25 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
       modifier = modifier || {}
       modifier.$set = modifier.$set || {}
       modifier.$set.friendlySlugs = doc.friendlySlugs || {}
-      modifier.$set.friendlySlugs[opts.slugField] = modifier.$set.friendlySlugs[opts.slugField] || {}
-      modifier.$set.friendlySlugs[opts.slugField].base = slugBase
-      modifier.$set.friendlySlugs[opts.slugField].index = index
+      modifier.$set.friendlySlugs[opts.slugField] = doc.friendlySlugs[opts.slugField] || []
+      slugObj = {}
+      slugObj.base = slugBase
+      slugObj.index = index
+      slugObj.slug = finalSlug
+      unless _.findWhere modifier.$set.friendlySlugs[opts.slugField], {slug: finalSlug}
+        modifier.$set.friendlySlugs[opts.slugField].push slugObj
       modifier.$set[opts.slugField] = finalSlug
       fsDebug(opts,modifier,'Final Modifier')
 
     else
       fsDebug(opts,'Set to update')
       doc.friendlySlugs = doc.friendlySlugs || {}
-      doc.friendlySlugs[opts.slugField] = doc.friendlySlugs[opts.slugField] || {}
-      doc.friendlySlugs[opts.slugField].base = slugBase
-      doc.friendlySlugs[opts.slugField].index = index
+      doc.friendlySlugs[opts.slugField] = doc.friendlySlugs[opts.slugField] || []
+      slugObj = doc.friendlySlugs[opts.slugField][0] || {}
+      slugObj.base = slugBase
+      slugObj.index = index
+      slugObj.slug = finalSlug
+      doc.friendlySlugs[opts.slugField].push slugObj
       doc[opts.slugField] = finalSlug
       fsDebug(opts,doc,'Final Doc')
     return true
