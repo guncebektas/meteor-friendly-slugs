@@ -1,5 +1,10 @@
 HISTORY.md
 
+### v0.4.0
+ - Nested fields are now supported to create slugs from. 
+ - add slugGenerator option to provide a custom function to generate the slug.
+ - added swedish transliterator 'å' -> 'a'
+
 ### v0.3.6
  - Added distinctUpTo option to specify what fields need to match in order to make a unique slug
 

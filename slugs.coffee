@@ -72,10 +72,12 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
     check(opts,Match.ObjectIncluding(fields))
 
     collection.before.insert (userId, doc) ->
+      fsDebug(opts,'before.insert function')
       runSlug(doc,opts)
       return
 
     collection.before.update (userId, doc, fieldNames, modifier, options) ->
+      fsDebug(opts,'before.update function')
       cleanModifier = () ->
         #Cleanup the modifier if needed
         delete modifier.$set if _.isEmpty(modifier.$set)
@@ -124,7 +126,7 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
           return true
 
         #Don't do anything if the slug from field has not changed
-        if doc[opts.slugFrom] is modifier.$set[opts.slugFrom]
+        if stringToNested(doc, opts.slugFrom) is stringToNested(modifier.$set, opts.slugFrom)
           fsDebug(opts,'slugFrom field has not changed, nothing to do.')
           cleanModifier()
           return true
@@ -143,7 +145,7 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
     fsDebug(opts,modifier, 'Modifier')
     fsDebug(opts,create,'Create')
 
-    from = if create or !modifier then doc[opts.slugFrom] else modifier.$set[opts.slugFrom]
+    from = if create or !modifier then stringToNested(doc, opts.slugFrom) else stringToNested(modifier.$set, opts.slugFrom)
 
     fsDebug(opts,from,'Slugging From')
 
@@ -248,3 +250,8 @@ slugify = (text, transliteration, maxLength) ->
     lastDash = slug.substring(0,maxLength).lastIndexOf('-')
     slug = slug.substring(0,lastDash)
   return slug
+
+stringToNested = (obj, path) ->
+  parts = path.split(".")
+  return obj[parts[0]] if (parts.length==1)
+  return stringToNested(obj[parts[0]], parts.slice(1).join("."))

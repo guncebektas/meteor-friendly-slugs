@@ -78,8 +78,8 @@ Collection.friendlySlugs([
 ```
 Each field specified will create a slug to the slug field specified.
 
-#### Iron Router
-This package does not extend iron router, you can select your items using normal means by querying the slugField. Here is an example in coffeescript:
+#### Routing
+This package does not extend any router, but should play nicely with any router you are using. You can select your items using normal means by querying the slugField. Here is an iron router example in coffeescript:
 ```
 @route "/collection/:slug",
   name:'collection'
@@ -94,8 +94,8 @@ Options
 
 Option | Default | Description
 --- | --- | ---
-slugFrom | 'name' | Name of field you want to base the slug from. *String*
-slugField | 'slug' | Name of field you want the slug to be stored to. *String*
+slugFrom | 'name' | Name of field you want to base the slug from. Does support nested fields using dot notation for example "profile.name" *String*
+slugField | 'slug' | Name of field you want the slug to be stored to. This cannot be a nested field. *String*
 distinct | true |  True = Slugs are unique, if 'foo' is already a stored slug for another item, the new item's slug will be 'foo-1' False = Slugs will not be unique, items can have the same slug as another item in the same collection. *Boolean*
 distinctUpTo | [] | if distinct = true list of fields of the collection that define the validity range of the distinction *Array of Strings*
 updateSlug | true | True = Update the item's slug if the slugField's content changes in an update. False = Slugs do not change when the slugField changes. *Boolean*
