@@ -103,6 +103,7 @@ createOnUpdate | true | True = If an item is updated and the slug has not been c
 maxLength | 0 (unlimited) | Limit how many characters the slug will be. This will not break words, but will break mid-sentence. Use 0 for no limit. *Number*
 transliteration | see default array in [Transliteration](#transliteration) | Translates characters with accents to URL compatible characters, see [Transliteration](#transliteration) for more info.
 debug | false | Turn to true to get console debug messages.
+slugGenerator | | Provide a custom function to generate the slug. Accepts baseSlug and index, returns the full slug. It is up to you to verify the uniqueness of the slug if you provide a custom function. *Function* (defaultSlug, index) return fullSlug
 
 Transliteration
 ------------------------
