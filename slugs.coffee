@@ -60,6 +60,8 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
 
     _.defaults(opts, defaults)
 
+    opts.maxLength = parseInt(opts.maxLength)
+
     fields =
       slugFrom: String
       slugField: String
