@@ -25,7 +25,7 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
       maxLength: 0
       debug: false
       transliteration: [
-        {from: 'àáâäãа', to: 'a'}
+        {from: 'àáâäåãа', to: 'a'}
         {from: 'б',      to: 'b'}
         {from: 'ç',      to: 'c'}
         {from: 'д',      to: 'd'}
