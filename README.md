@@ -21,6 +21,7 @@ Features
 - Can optionally create a slug without the auto-incrementing index.
 - Can optionally update a slug when the field it is based from is updated.
 - Do all of these things efficiently, storing the base and index for a quick query
+- Keeps a history of all used slugs for every item. And doesn't use slugs, that were used previously (usefull for 301 redirects)
 
 Installation
 ------------------------
