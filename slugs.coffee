@@ -98,20 +98,21 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
       modifier.$set = modifier.$set || {}
 
       #Don't do anything if the slugFrom field isn't present (before or after update)
-      if !doc[opts.slugFrom]? and !modifier.$set[opts.slugFrom]?
+      if !stringToNested(doc, opts.slugFrom)? and !modifier.$set[opts.slugFrom]?
+        fsDebug(opts,"slugFrom is not present (either before or after update), leaving.")
         cleanModifier()
         return true
 
       #See if the slugFrom has changed
       slugFromChanged = false
       if modifier.$set[opts.slugFrom]?
-        if doc[opts.slugFrom] isnt modifier.$set[opts.slugFrom]
+        if stringToNested(doc, opts.slugFrom) isnt modifier.$set[opts.slugFrom]
           slugFromChanged = true
 
       fsDebug(opts,slugFromChanged,'slugFromChanged')
 
       #Is the slug missing / Is this an existing item we have added a slug to? AND are we supposed to create a slug on update?
-      if !doc[opts.slugField]? and opts.createOnUpdate
+      if !stringToNested(doc, opts.slugFrom)? and opts.createOnUpdate
         fsDebug(opts,'Update: Slug Field is missing and createOnUpdate is set to true')
 
         if slugFromChanged
