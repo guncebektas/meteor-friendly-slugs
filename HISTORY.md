@@ -1,7 +1,11 @@
 HISTORY.md
 
+### v0.5.0
+ - updateSlug is now conditional based on doc, can still be used as boolean
+ - Test existing doc for nested fields
+
 ### v0.4.0
- - Nested fields are now supported to create slugs from. 
+ - Nested fields are now supported to create slugs from.
  - add slugGenerator option to provide a custom function to generate the slug.
  - added swedish transliterator 'å' -> 'a'
 

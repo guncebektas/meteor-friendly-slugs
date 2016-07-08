@@ -98,7 +98,7 @@ slugFrom | 'name' | Name of field you want to base the slug from. Does support n
 slugField | 'slug' | Name of field you want the slug to be stored to. This cannot be a nested field. *String*
 distinct | true |  True = Slugs are unique, if 'foo' is already a stored slug for another item, the new item's slug will be 'foo-1' False = Slugs will not be unique, items can have the same slug as another item in the same collection. *Boolean*
 distinctUpTo | [] | if distinct = true list of fields of the collection that define the validity range of the distinction *Array of Strings*
-updateSlug | true | True = Update the item's slug if the slugField's content changes in an update. False = Slugs do not change when the slugField changes. *Boolean*
+updateSlug | true | True = Update the item's slug if the slugField's content changes in an update. False = Slugs do not change when the slugField changes. Also can provide a function (doc,modifier) which returns true or false *Boolean or Function*
 createOnUpdate | true | True = If an item is updated and the slug has not been created yet and the slugField has not changed, create the slug during the update False = Slugs will not be created during an update unless updateSlug = true in your settings and the slugField has changed. *Boolean*
 maxLength | 0 (unlimited) | Limit how many characters the slug will be. This will not break words, but will break mid-sentence. Use 0 for no limit. *Number*
 transliteration | see default array in [Transliteration](#transliteration) | Translates characters with accents to URL compatible characters, see [Transliteration](#transliteration) for more info.
