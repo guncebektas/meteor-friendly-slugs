@@ -64,10 +64,16 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
       slugFrom: String
       slugField: String
       distinct: Boolean
-      updateSlug: Boolean
       createOnUpdate: Boolean
       maxLength: Number
       debug: Boolean
+
+    if typeof opts.updateSlug != "function"
+      if (opts.updateSlug)
+        opts.updateSlug = (doc) -> true
+      else
+        opts.updateSlug = (doc) -> false
+
 
     check(opts,Match.ObjectIncluding(fields))
 
@@ -120,7 +126,7 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
 
       else
         # Don't change anything on update if updateSlug is false
-        if opts.updateSlug is false
+        if opts.updateSlug?(doc) is false
           fsDebug(opts,'updateSlug is false, nothing to do.')
           cleanModifier()
           return true
