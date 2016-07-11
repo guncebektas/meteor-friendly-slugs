@@ -98,21 +98,22 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
       modifier.$set = modifier.$set || {}
 
       #Don't do anything if the slugFrom field isn't present (before or after update)
-      if !stringToNested(doc, opts.slugFrom)? and !modifier.$set[opts.slugFrom]?
+      if !stringToNested(doc, opts.slugFrom) and !modifier.$set[opts.slugFrom]? and !stringToNested(modifier.$set, opts.slugFrom)
         fsDebug(opts,"slugFrom is not present (either before or after update), leaving.")
         cleanModifier()
         return true
 
       #See if the slugFrom has changed
       slugFromChanged = false
-      if modifier.$set[opts.slugFrom]?
-        if stringToNested(doc, opts.slugFrom) isnt modifier.$set[opts.slugFrom]
+      if modifier.$set[opts.slugFrom]? || stringToNested(modifier.$set, opts.slugFrom)
+        docFrom = stringToNested(doc, opts.slugFrom)
+        if (docFrom isnt modifier.$set[opts.slugFrom]) || (docFrom isnt stringToNested(modifier.$set, opts.slugFrom))
           slugFromChanged = true
 
       fsDebug(opts,slugFromChanged,'slugFromChanged')
 
       #Is the slug missing / Is this an existing item we have added a slug to? AND are we supposed to create a slug on update?
-      if !stringToNested(doc, opts.slugFrom)? and opts.createOnUpdate
+      if !stringToNested(doc, opts.slugField) and opts.createOnUpdate
         fsDebug(opts,'Update: Slug Field is missing and createOnUpdate is set to true')
 
         if slugFromChanged
@@ -153,6 +154,10 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
     fsDebug(opts,create,'Create')
 
     from = if create or !modifier then stringToNested(doc, opts.slugFrom) else stringToNested(modifier.$set, opts.slugFrom)
+
+    if from == false
+      fsDebug(opts,"Nothing to slug from, leaving.")
+      return true
 
     fsDebug(opts,from,'Slugging From')
 
@@ -260,5 +265,9 @@ slugify = (text, transliteration, maxLength) ->
 
 stringToNested = (obj, path) ->
   parts = path.split(".")
-  return obj[parts[0]] if (parts.length==1)
+  if parts.length==1
+    if obj? && obj[parts[0]]?
+      return obj[parts[0]]
+    else
+      return false
   return stringToNested(obj[parts[0]], parts.slice(1).join("."))
