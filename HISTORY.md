@@ -1,5 +1,8 @@
 HISTORY.md
 
+### v0.5.1
+ - additional fixes around nested object cases
+
 ### v0.5.0
  - updateSlug is now conditional based on doc, can still be used as boolean
  - Test existing doc for nested fields
