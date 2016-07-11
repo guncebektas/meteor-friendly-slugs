@@ -1,5 +1,8 @@
 HISTORY.md
 
+### v0.6.0
+ - added ability to create slugs from multiple fields
+
 ### v0.5.1
  - additional fixes around nested object cases
 

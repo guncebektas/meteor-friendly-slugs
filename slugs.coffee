@@ -12,11 +12,12 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
   _.each options, (opts) ->
     if _.isString(opts)
       opts = {
-        slugFrom: opts
+        slugFrom: [opts]
       }
+    opts.slugFrom = [opts.slugFrom] if _.isString opts.slugFrom
 
     defaults =
-      slugFrom: 'name'
+      slugFrom: ['name']
       slugField: 'slug'
       distinct: true
       distinctUpTo: []
@@ -61,7 +62,7 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
     _.defaults(opts, defaults)
 
     fields =
-      slugFrom: String
+      slugFrom: Array
       slugField: String
       distinct: Boolean
       createOnUpdate: Boolean
@@ -97,18 +98,22 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
       modifier = modifier || {}
       modifier.$set = modifier.$set || {}
 
-      #Don't do anything if the slugFrom field isn't present (before or after update)
-      if !stringToNested(doc, opts.slugFrom) and !modifier.$set[opts.slugFrom]? and !stringToNested(modifier.$set, opts.slugFrom)
-        fsDebug(opts,"slugFrom is not present (either before or after update), leaving.")
+      #Don't do anything if all the slugFrom fields aren't present (before or after update)
+      cont = false
+      _.each opts.slugFrom, (slugFrom) ->
+        cont = true if stringToNested(doc, slugFrom) || modifier.$set[slugFrom]? || stringToNested(modifier.$set, slugFrom)
+      if !cont
+        fsDebug(opts,"no slugFrom fields are present (either before or after update), leaving.")
         cleanModifier()
         return true
 
-      #See if the slugFrom has changed
+      #See if any of the slugFrom fields have changed
       slugFromChanged = false
-      if modifier.$set[opts.slugFrom]? || stringToNested(modifier.$set, opts.slugFrom)
-        docFrom = stringToNested(doc, opts.slugFrom)
-        if (docFrom isnt modifier.$set[opts.slugFrom]) || (docFrom isnt stringToNested(modifier.$set, opts.slugFrom))
-          slugFromChanged = true
+      _.each opts.slugFrom, (slugFrom) ->
+        if modifier.$set[slugFrom]? || stringToNested(modifier.$set, slugFrom)
+          docFrom = stringToNested(doc, slugFrom)
+          if (docFrom isnt modifier.$set[slugFrom]) and (docFrom isnt stringToNested(modifier.$set, slugFrom))
+            slugFromChanged = true
 
       fsDebug(opts,slugFromChanged,'slugFromChanged')
 
@@ -134,7 +139,7 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
           return true
 
         #Don't do anything if the slug from field has not changed
-        if stringToNested(doc, opts.slugFrom) is stringToNested(modifier.$set, opts.slugFrom)
+        if !slugFromChanged
           fsDebug(opts,'slugFrom field has not changed, nothing to do.')
           cleanModifier()
           return true
@@ -153,7 +158,21 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
     fsDebug(opts,modifier, 'Modifier')
     fsDebug(opts,create,'Create')
 
-    from = if create or !modifier then stringToNested(doc, opts.slugFrom) else stringToNested(modifier.$set, opts.slugFrom)
+    combineFrom = (doc, fields, modifierDoc) ->
+      fromValues = []
+      _.each fields, (f) ->
+        if modifierDoc?
+          if stringToNested(modifierDoc, f)
+            val = stringToNested(modifierDoc, f)
+          else
+            val = stringToNested(doc, f)
+        else
+          val = stringToNested(doc, f)
+        fromValues.push(val) if val
+      return false if fromValues.length == 0
+      return fromValues.join('-')
+
+    from = if create or !modifier then combineFrom(doc, opts.slugFrom) else combineFrom(doc, opts.slugFrom, modifier.$set)
 
     if from == false
       fsDebug(opts,"Nothing to slug from, leaving.")

@@ -2,12 +2,12 @@ URL Friendly slugs for Meteor
 ------------------------
 This package has two main purposes:
 
-1. Make it easy to create a sanitized and URL friendly slug based off of an existing field
+1. Make it easy to create a sanitized and URL friendly slug based off of an existing field or fields.
 2. Auto-increment the slug if needed to ensure each item has a unique URL
 
 Features
 ------------------------
-- Automatically assign a URL friendly slug based on a field of your specification. The slug will be sanitized following these rules:
+- Automatically assign a URL friendly slug based on a field or fields of your specification. The slug will be sanitized following these rules:
   - Uses all lowercase letters
   - Transliterates accented and other variants (see [Transliteration](#transliteration))
   - Replace spaces with -
@@ -17,7 +17,7 @@ Features
   - Trim - from start of text
   - Trim - from end of text
 - Checks other items in the collection for the same slug, adds an auto-incrementing index to the end if needed. For example if a slug is based of a field who's value is "Foo Bar" and there is another item with the same value, the new slug will be 'foo-bar-1'.
-- Can create slugs for multiple fields.
+- Can create slugs for multiple fields, and from multiple fields.
 - Can optionally create a slug without the auto-incrementing index.
 - Can optionally update a slug when the field it is based from is updated.
 - Do all of these things efficiently, storing the base and index for a quick query
@@ -71,7 +71,7 @@ Collection.friendlySlugs([
     slugField: 'slug',
   },
   {
-    slugFrom: 'anotherField',
+    slugFrom: ['profile.firstName', 'profile.lastName'],
     slugField: 'slug2',
   }
 ]);
@@ -94,7 +94,7 @@ Options
 
 Option | Default | Description
 --- | --- | ---
-slugFrom | 'name' | Name of field you want to base the slug from. Does support nested fields using dot notation for example "profile.name" *String*
+slugFrom | 'name' | Name of field (or array of names) you want to base the slug from. Does support nested fields using dot notation for example "profile.name" If an array is provided slug will be built from field values separated by '-' in the order they appear in the array. *String or Array*
 slugField | 'slug' | Name of field you want the slug to be stored to. This cannot be a nested field. *String*
 distinct | true |  True = Slugs are unique, if 'foo' is already a stored slug for another item, the new item's slug will be 'foo-1' False = Slugs will not be unique, items can have the same slug as another item in the same collection. *Boolean*
 distinctUpTo | [] | if distinct = true list of fields of the collection that define the validity range of the distinction *Array of Strings*
