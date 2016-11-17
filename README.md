@@ -95,7 +95,7 @@ Options
 Option | Default | Description
 --- | --- | ---
 slugFrom | 'name' | Name of field (or array of names) you want to base the slug from. Does support nested fields using dot notation for example "profile.name" If an array is provided slug will be built from field values separated by '-' in the order they appear in the array. *String or Array*
-slugField | 'slug' | Name of field you want the slug to be stored to. This cannot be a nested field. *String*
+slugField | 'slug' | Name of field you want the slug to be stored to. This can be a nested field. *String*
 distinct | true |  True = Slugs are unique, if 'foo' is already a stored slug for another item, the new item's slug will be 'foo-1' False = Slugs will not be unique, items can have the same slug as another item in the same collection. *Boolean*
 distinctUpTo | [] | if distinct = true list of fields of the collection that define the validity range of the distinction *Array of Strings*
 updateSlug | true | True = Update the item's slug if the slugField's content changes in an update. False = Slugs do not change when the slugField changes. Also can provide a function (doc,modifier) which returns true or false *Boolean or Function*
