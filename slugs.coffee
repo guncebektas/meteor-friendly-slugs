@@ -57,6 +57,8 @@ Mongo.Collection.prototype.friendlySlugs = (options = {}) ->
         {from: 'ю',      to: 'yu'}
         {from: 'ж',      to: 'zh'}
         {from: 'ъь',     to: ''}
+        {from: 'œ',      to: 'oe'}
+        {from: 'آإأٱٲٳ',  to: 'ا'}
       ]
 
     _.defaults(opts, defaults)
@@ -273,7 +275,7 @@ slugify = (text, transliteration, maxLength) ->
     text = text.replace(new RegExp('['+item.from+']','g'),item.to)
   slug = text
     .replace(/'/g, '')              # Remove all apostrophes
-    .replace(/[^0-9a-z-]/g, '-')    # Replace anything that is not 0-9, a-z, or - with -
+    .replace(/[^0-9a-z\u0660-\u0669\u0627-\u064A-]/g, '-')    # Replace anything that is not 0-9, a-z, arabic characters(ا-ي ,۰-۹) or - with -
     .replace(/\-\-+/g, '-')         # Replace multiple - with single -
     .replace(/^-+/, '')             # Trim - from start of text
     .replace(/-+$/, '');            # Trim - from end of text
