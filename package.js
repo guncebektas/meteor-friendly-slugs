@@ -1,5 +1,5 @@
 Package.describe({
-  name: 'guncebektas:friendly-slugs',
+  name: 'todda00:friendly-slugs',
   version: '1.0.0',
   // Brief, one-line summary of the package.
   summary: 'Generate URL friendly slugs from a field with auto-incrementation to ensure unique URLs.',
