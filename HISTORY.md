@@ -1,5 +1,12 @@
 HISTORY.md
+HISTORY.md
 
+### v1.0.0
+- Refactored and modernized
+- Compatible with Meteor 2.8.1.
+- Some features dropped to keep it simple.
+- Readme corrected as some features are dropped.
+- 
 ### v0.6.0
  - added ability to create slugs from multiple fields
 
