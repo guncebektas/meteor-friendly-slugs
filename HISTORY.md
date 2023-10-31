@@ -1,5 +1,12 @@
 HISTORY.md
 
+### v1.0.0
+- Forked from [meteor-friendly-slugs](https://github.com/todda00/meteor-friendly-slugs)
+- Refactored and modernized
+- Compatible with Meteor 3.
+- Some features dropped to keep it simple.
+- Readme corrected as some features are dropped.
+
 ### v0.6.0
  - added ability to create slugs from multiple fields
 
