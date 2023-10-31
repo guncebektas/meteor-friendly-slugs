@@ -1,9 +1,8 @@
 HISTORY.md
 
 ### v1.0.0
-- Forked from [meteor-friendly-slugs](https://github.com/todda00/meteor-friendly-slugs)
 - Refactored and modernized
-- Compatible with Meteor 3.
+- Compatible with Meteor 2.8.1.
 - Some features dropped to keep it simple.
 - Readme corrected as some features are dropped.
 
