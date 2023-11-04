@@ -1,4 +1,7 @@
-HISTORY.md
+# HISTORY.md
+
+### v1.0.1
+- Bug on insert.before hook fixed
 
 ### v1.0.0
 - Refactored and modernized
