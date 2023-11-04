@@ -33,6 +33,7 @@ Meteor.Collection.prototype.friendlySlugs = function (options) {
 
     collection.before.insert(async function (userId, doc) {
       log('before.insert function');
+
       await runSlug(doc, opts);
     });
 
@@ -230,13 +231,24 @@ Meteor.Collection.prototype.friendlySlugs = function (options) {
 
     const finalSlug = slugGenerator(slugBase, index);
 
-    log(`Set to modify the slug on update as ${finalSlug}`);
-    modifier.$set.friendlySlugs = doc.friendlySlugs || {};
-    modifier.$set.friendlySlugs[opts.slugField] = modifier.$set.friendlySlugs[opts.slugField] || {};
-    modifier.$set.friendlySlugs[opts.slugField].base = slugBase;
-    modifier.$set.friendlySlugs[opts.slugField].index = index;
-    modifier.$set[opts.slugField] = finalSlug;
-    log(modifier, 'Final Modifier');
+    if (modifier) {
+      log(`Set to modify the slug on update as ${finalSlug}`);
+      modifier.$set = modifier.$set || {};
+      modifier.$set.friendlySlugs = doc.friendlySlugs || {};
+      modifier.$set.friendlySlugs[opts.slugField] = modifier.$set.friendlySlugs[opts.slugField] || {};
+      modifier.$set.friendlySlugs[opts.slugField].base = slugBase;
+      modifier.$set.friendlySlugs[opts.slugField].index = index;
+      modifier.$set[opts.slugField] = finalSlug;
+      log(modifier, 'Final Modifier');
+    } else {
+      log(opts, 'Set to update');
+      doc.friendlySlugs = doc.friendlySlugs || {};
+      doc.friendlySlugs[opts.slugField] = doc.friendlySlugs[opts.slugField] || {};
+      doc.friendlySlugs[opts.slugField].base = slugBase;
+      doc.friendlySlugs[opts.slugField].index = index;
+      doc[opts.slugField] = finalSlug;
+      log(opts, doc, 'Final Doc');
+    }
   };
 };
 
@@ -248,10 +260,10 @@ const log = (item, label) => {
   }
 
   if (typeof item === 'object') {
-    console.log(`friendly-slugs [DEBUG] ${label} ↓`);
-    console.log(item);
+    log(`friendly-slugs [DEBUG] ${label} ↓`);
+    log(item);
   } else {
-    console.log(`friendly-slugs [DEBUG] ${label} = ${item}`);
+    log(`friendly-slugs [DEBUG] ${label} = ${item}`);
   }
 };
 
